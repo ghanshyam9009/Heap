@@ -1,0 +1,43 @@
+#include <bits/stdc++.h> 
+
+int countNodes ( BinaryTreeNode<int>* root) {
+
+    if ( root == NULL ) return 0 ;
+
+    return ( 1 + countNodes(root->left) + countNodes(root->right) ) ;
+
+}
+
+// for checking is it a complete binary tree or not
+
+bool isCBT ( BinaryTreeNode<int>*root , int ind , int n ) {
+
+    if ( root == NULL ) return true ;
+
+    if ( ind >= n ) return false ;
+
+    else return ( isCBT(root->left , 2*ind+1 , n) && isCBT(root->right , 2*ind+2 , n) ) ; 
+
+}
+
+//for checking is it a Max_heap or not
+
+bool ismaxHeap(BinaryTreeNode<int>* root ) {
+
+    if ( root->left == NULL && root->right == NULL ) return true ;
+
+    else if ( root->right == NULL ) return ( root->data >= root->left->data) ;
+
+    else return (ismaxHeap(root->left) && ismaxHeap(root->right) && 
+
+    root->data >= root->left->data && root->data >= root->right->data ) ;
+
+}
+
+bool isBinaryHeapTree(BinaryTreeNode<int>* root) {
+
+    int n = countNodes(root) ;
+
+    return (isCBT(root , 0 , n) && ismaxHeap(root)) ;
+
+}
