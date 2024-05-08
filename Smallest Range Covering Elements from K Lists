@@ -1,0 +1,73 @@
+
+Input: nums = [[4,10,15,24,26],[0,9,12,20],[5,18,22,30]]
+Output: [20,24]
+Explanation: 
+List 1: [4, 10, 15, 24,26], 24 is in range [20,24].
+List 2: [0, 9, 12, 20], 20 is in range [20,24].
+List 3: [5, 18, 22, 30], 22 is in range [20,24].
+
+class Solution {
+public:
+    class Node{
+        public:
+        int data;
+        int row;
+        int col;
+
+        Node(int d,int r,int c){
+            data =d;
+            row=r;
+            col=c;
+        }
+    };
+
+    class compare{
+         public:
+         bool operator()(Node*a, Node*b){
+            return a->data > b->data;
+    }
+ };
+
+    vector<int> smallestRange(vector<vector<int>>& nums) {
+        int k= nums.size();
+
+        priority_queue<Node*, vector<Node*>,compare>pq;
+
+        int mini = INT_MAX;
+        int maxi = INT_MIN;
+
+        for(int i=0;i<k;i++){
+            int element = nums[i][0];
+            maxi = max(maxi,element);
+            mini = min(mini,element);
+            pq.push(new Node(nums[i][0],i,0));
+        }
+
+        int start = mini;
+        int end = maxi;
+
+        while(!pq.empty()){
+            Node*temp =pq.top();
+            pq.pop();
+
+            mini = temp->data;
+
+            if(maxi-mini < end-start)
+            {
+                start=mini;
+                end=maxi;
+            }
+
+            if(temp->col+1 < nums[temp->row].size())
+            {
+                maxi=max(maxi, nums[temp->row][temp->col+1]);
+                pq.push(new Node(nums[temp->row][temp->col+1], temp->row, temp->col+1));
+            }
+            else
+            {  
+                break;
+            }
+        }
+        return{start,end};
+    }
+};
