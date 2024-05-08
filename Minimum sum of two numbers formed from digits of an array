@@ -1,0 +1,140 @@
+#include <bits/stdc++.h> 
+string getMinimumSum(vector<int> &arr, int n)
+{
+	priority_queue<int>pq;
+	string ans="";
+	int rem=0;
+	for (auto it:arr) pq.push(it);
+	while(pq.size()>1)
+	{
+		int first=pq.top();
+		pq.pop();
+		int second=pq.top();
+		pq.pop();
+		int sum=first+second+rem;
+		if (sum==0) break;
+		rem=sum/10;
+		ans+=to_string(sum%10);
+		
+	}
+	if (pq.size())
+	{
+		int num=pq.top();
+		num+=rem;
+		rem=num/10;
+		if (num!=0) 
+		ans+=to_string(num%10);
+	}
+	while(rem)
+	{
+		ans+=to_string(rem);
+		rem/=10;
+	}
+	reverse(ans.begin(),ans.end());
+	if(ans.size()==0) return "0";
+	return ans;
+
+}
+
+
+
+
+// sorting method
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int solve(int arr[], int N)
+{
+	sort(arr, arr + N);
+
+	int a = 0, b = 0;
+	for (int i = 0; i < N; i++) {
+		if (i & 1)
+			a = a * 10 + arr[i];
+		else
+			b = b * 10 + arr[i];
+	}
+	return a + b;
+}
+
+int main()
+{
+	int arr[] = { 6, 8, 4, 5, 2, 3 };
+	int N = sizeof(arr) / sizeof(arr[0]);
+	cout << "Sum is " << solve(arr, N);
+	return 0;
+}
+
+
+
+// apprach 3
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+string solve(int arr[], int n)
+{
+	sort(arr, arr + n)
+	string a = "", b = "";
+
+	for (int i = 0; i < n; i += 2) {
+		a += (arr[i] + '0');
+	}
+	for (int i = 1; i < n; i += 2) {
+		b += (arr[i] + '0');
+	}
+
+	int j = a.length() - 1;
+	int k = b.length() - 1;
+
+	int carry = 0;
+	string ans = "";
+	while (j >= 0 && k >= 0) {
+		int sum = 0;
+		sum += (a[j] - '0') + (b[k] - '0') + carry;
+		ans += to_string(sum % 10);
+		carry = sum / 10;
+		j--;
+		k--;
+	}
+
+
+	while (j >= 0) {
+		int sum = 0;
+		sum += (a[j] - '0') + carry;
+		ans += to_string(sum % 10);
+		carry = sum / 10;
+		j--;
+	}
+
+	while (k >= 0) {
+		int sum = 0;
+		sum += (b[k] - '0') + carry;
+		ans += to_string(sum % 10);
+		carry = sum / 10;
+		k--;
+	}
+	if (carry) {
+		ans += to_string(carry);
+	}
+
+	while (!ans.empty() and ans.back() == '0')
+		ans.pop_back();
+
+	reverse(ans.begin(), ans.end());
+	return ans;
+}
+
+// Driver's Code
+int main()
+{
+	int arr[] = { 6, 8, 4, 5, 2, 3 };
+	int N = sizeof(arr) / sizeof(arr[0]);
+
+	// Function call
+	cout << "Sum is " << solve(arr, N);
+	return 0;
+} // Driver Code Ends
