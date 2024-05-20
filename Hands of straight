@@ -1,0 +1,54 @@
+Example 1:
+Input: hand = [1,2,3,6,2,3,4,7,8], groupSize = 3
+Output: true
+Explanation: Alice's hand can be rearranged as [1,2,3],[2,3,4],[6,7,8]
+
+Example 2:
+Input: hand = [1,2,3,4,5], groupSize = 4
+Output: false
+Explanation: Alice's hand can not be rearranged into groups of 4.
+
+
+
+class Solution {
+public:
+bool check(vector<int> a){
+    for(int i=0; i<a.size();i++){
+        if(i>0){
+            if((a[i]-a[i-1])!=1) return false;
+        }
+    }
+    return true;
+}
+    bool isNStraightHand(vector<int>& hand, int groupSize){
+   
+        if(hand.size() % (groupSize)!=0) return false;
+        sort(hand.begin(),hand.end());
+        map<int,int> mp;
+        for(auto i : hand){
+            mp[i]++;
+
+        }
+        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>q;
+        for(auto i : mp ){
+            q.push({i.first,i.second});
+        }
+        while(!q.empty()){
+            vector<int> a;
+            vector<pair<int,int>> b;
+            for(int i=0;i<groupSize;i++){
+                 int x=q.top().first;
+                 a.push_back(x);
+                 b.push_back({q.top().first,q.top().second});
+                 q.pop();
+            }
+            if(!check(a)) return false;
+            for(auto i : b){
+                if(i.second > 1) q.push({i.first,i.second-1});
+                
+            } 
+        }
+        return true;
+
+    }
+};
